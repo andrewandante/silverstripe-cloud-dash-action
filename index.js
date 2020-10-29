@@ -9,18 +9,20 @@ try {
     const octokit = new github.GitHub(core.getInput('github-token'));
     const axios = require('axios');
 
-    const response = await axios.get(
-        'https://silverstripe.cloud/naut/meta',
-        {
-            auth: {
-                username,
-                password,
-            },
-        }
-    );
+    (async () => {
+        const response = await axios.get(
+            'https://silverstripe.cloud/naut/meta',
+            {
+                auth: {
+                    username,
+                    password,
+                },
+            }
+        );
+        console.log(response.status);
+        console.log(response.data);
+    })();
 
-    console.log(response.status);
-    console.log(response.data);
 } catch (error) {
     console.log('Uh oh. It didn\'t work!');
     core.setFailed(error.message);
