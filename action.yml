@@ -1,0 +1,18 @@
+name: 'Silverstripe Cloud Dashboard API Service'
+description: 'Interact with the Silverstripe Cloud Dashboard'
+inputs:
+  dash-api-username:
+    description: 'Username to authenticate with the dashboard API'
+    required: true
+  dash-api-token:
+    description: 'API token to authenticate with the dashboard API'
+    required: true
+#  github-token:
+#    description: 'Oauth token to enable Github API querying'
+#    required: true
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
+branding:
+  icon: layers
+  color: blue

@@ -1,0 +1,32 @@
+{
+  "name": "silverstripe-cloud-dash-action",
+  "description": "Provides an interface for interacting with the Silverstripe Cloud Dashboard API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "ncc build index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrewandante/silverstripe-cloud-dash-action.git"
+  },
+  "keywords": [
+    "silverstripe",
+    "dash",
+    "dashboard",
+    "api",
+    "cloud"
+  ],
+  "author": "Andrew Aitken-Fincham",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andrewandante/silverstripe-cloud-dash-action/issues"
+  },
+  "homepage": "https://github.com/andrewandante/silverstripe-cloud-dash-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/github": "^2.1.0",
+    "axios": "^0.21.0",
+    "moment": "^2.24.0"
+  }
+}
