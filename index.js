@@ -3,7 +3,8 @@ import * as github from '@actions/github';
 import moment from "moment";
 
 try {
-    const dashApiToken = core.getInput('dash-api-token');
+    const username = core.getInput('dash-api-username');
+    const password = core.getInput('dash-api-token');
     const repo = github.context.repo;
     const octokit = new github.GitHub(core.getInput('github-token'));
     const axios = require('axios');
@@ -12,8 +13,8 @@ try {
         'https://silverstripe.cloud/naut/meta',
         {
             auth: {
-                username: 'andrew.aitkenfincham@silverstripe.com',
-                password: dashApiToken,
+                username,
+                password,
             },
         }
     );

@@ -1,0 +1,17 @@
+# Used for testing only
+on: [push]
+
+jobs:
+  silverstripe-cloud-dash-api-job:
+    runs-on: ubuntu-latest
+    name: Test API Connection
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Test connection
+        id: ping
+        uses: ./
+        with:
+          dash-api-username: ${{ secrets.DASH_API_USERNAME }}
+          dash-api-token: ${{ secrets.DASH_API_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
