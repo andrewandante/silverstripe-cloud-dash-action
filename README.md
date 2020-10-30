@@ -2,8 +2,10 @@
 
 This action interacts with the Silverstripe Cloud Dashboard API.
 
-Currently creates a deployment for the commit SHA that triggered the
+It will create a deployment for the commit SHA that triggered the
 workflow.
+
+[See the test.yml file for an example that will trigger on every push](./.github/workflows/test.yml)
 
 ## Inputs
 
@@ -58,6 +60,7 @@ Use semver for tagging and releases.
 - split out a core library for Dash access and re-use it for a CWP version
 - make things a little more customisable
     - fill in description somehow
-    - allow different 'bypass' types
     - custom deploy titles
     - deploy a tag/branch instead of a SHA
+- use the triggerer's dash api crendentials instead of a bot user
+- allow scheduling
