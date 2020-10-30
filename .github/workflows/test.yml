@@ -9,7 +9,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Create UAT deployment for SHA
-        id: ping
+        id: deploy-uat
         uses: ./
         with:
           dash-api-username: ${{ secrets.DASH_API_USERNAME }}
