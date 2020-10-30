@@ -17,3 +17,4 @@ jobs:
           dash-stack-name: githubac
           dash-env-name: UAT
           debug: true
+          bypass-level: none
