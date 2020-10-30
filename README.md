@@ -24,9 +24,19 @@ Short name for your stack (check the URL in Dash). Maximum 8 characters
 
 Which environment to interact with (usually UAT or Production)
 
+### bypass-level
+
+One of:
+
+- `none` - will just create the deployment
+- `approval` - will create and bypass approval, but not start the deployment
+- `start' - will bypass and start immediately
+
+If you get a `403` response when setting one of these, you probably don't have permission to bypass - check with your stack manager.
+
 ### debug
 
-Show debug output
+Show debug output (default: false)
 
 ## Development
 
@@ -50,3 +60,4 @@ Use semver for tagging and releases.
     - fill in description somehow
     - allow different 'bypass' types
     - custom deploy titles
+    - deploy a tag/branch instead of a SHA

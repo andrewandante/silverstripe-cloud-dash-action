@@ -38,10 +38,20 @@ try {
     const password = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('dash-api-token');
     const stack = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('dash-stack-name');
     const env = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('dash-env-name');
+    let bypassLevel = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('bypass-level');
+    if (!['none', 'approval', 'start'].includes(bypassLevel)) {
+        console.log('Invalid bypass level detected - defaulting to [none]');
+        bypassLevel = 'none';
+    }
+
     const debug = !!_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('debug');
 
     // Apparently this is the best way to get the event data
     const eventData = JSON.parse(fs__WEBPACK_IMPORTED_MODULE_2__.readFileSync(process.env.GITHUB_EVENT_PATH, 'utf8'));
+
+    if (debug) {
+        console.log(eventData);
+    }
 
     // @TODO make this configurable
     const baseURL = 'https://silverstripe.cloud/naut';
@@ -75,23 +85,64 @@ try {
             console.log(envShowResponse.data);
         }
 
+        const triggerSyncResponse = await axios.post(
+            `${baseURL}/project/${stack}/git/fetches`,
+            {},
+            authConfig
+        )
+        .then(resp => {
+            if (debug) {
+                console.log(`[${triggerSyncResponse.status}]`);
+                console.log(triggerSyncResponse.data);
+            }
+        })
+        .catch(error => {
+            console.log('Sync trigger failed - sleeping a bit then trying naively...');
+        });
+
+        if (triggerSyncResponse !== undefined && triggerSyncResponse.status === 202) {
+            const syncID = triggerSyncResponse.data.id;
+            let syncStatus = '';
+            let syncStatusResponse = '';
+            let attempts = 0;
+            while (syncStatus !== 'Complete' && attempts < 10) {
+                attempts++
+                await new Promise(r => setTimeout(r, 2000));
+                syncStatusResponse = await axios.get(
+                    `${baseURL}/project/${stack}/git/fetches/${syncID}`,
+                    authConfig
+                );
+                syncStatus = syncStatusResponse.data.attributes.status;
+            }
+            console.log('Sync complete!')
+        } else {
+            await new Promise(r => setTimeout(r, 10000));
+        }
+
         try {
             let triggerer = 'unknown';
+            let ref = _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.ref;
             const eventType = _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.eventName;
             if (eventType === 'push') {
-                triggerer = eventData.pusher.email;
+                triggerer = eventData.pusher.name;
+                ref = eventData.after;
             } else if (eventType === 'pull_request') {
                 triggerer = eventData.pull_request.user.login;
+                ref = eventData.pull_request.pull_request.head.sha;
             }
+
+            let deployPayload = {
+                ref ,
+                ref_type: 'sha',
+                title: `[${triggerer}] triggered deployment via Github action`,
+                bypass: bypassLevel === 'approval',
+                bypass_and_start: bypassLevel === 'start',
+            };
 
             const createDeploymentResponse = await axios.post(
                 `${baseURL}/project/${stack}/environment/${env}/deploys`,
-                {
-                    ref: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.ref,
-                    ref_type: 'sha',
-                    title: `[${triggerer}] triggered deployment via Github action`,
-                },
-                authConfig
+                deployPayload,
+                authConfig,
             )
             .catch(error => {
                 if (debug) {

@@ -13,6 +13,10 @@ inputs:
   dash-env-name:
     description: 'Which env to interact with (usually UAT or Production'
     required: true
+  bypass-level:
+    description: 'What level of bypass power to give this deployment [none, approval, start]'
+    default: 'none'
+    required: false
   debug:
     description: 'Show debug output'
     required: false
