@@ -7,9 +7,15 @@ inputs:
   dash-api-token:
     description: 'API token to authenticate with the dashboard API'
     required: true
-#  github-token:
-#    description: 'Oauth token to enable Github API querying'
-#    required: true
+  dash-stack-name:
+    description: 'Short name for your stack (check the URL in Dash)'
+    required: true
+  dash-env-name:
+    description: 'Which env to interact with (usually UAT or Production'
+    required: true
+  debug:
+    description: 'Show debug output'
+    required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'

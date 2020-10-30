@@ -8,10 +8,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Test connection
+      - name: Create UAT deployment for SHA
         id: ping
         uses: ./
         with:
           dash-api-username: ${{ secrets.DASH_API_USERNAME }}
           dash-api-token: ${{ secrets.DASH_API_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          dash-stack-name: githubac
+          dash-env-name: UAT
+          debug: true
